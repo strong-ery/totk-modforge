@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide — TotK Modding Resource</title>
+    <link rel="stylesheet" href="../../guide.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: 'HyliaSerif';
+            src: url('../../assets/fonts/HyliaSerifBeta-Regular.otf') format('opentype');
+        }
+    </style>
+</head>
+<body>
+
+    <div id="noise-overlay"></div>
+
+    <header class="guide-header">
+        <a href="../../index.html" class="back-link">← Back to Hub</a>
+        <div class="guide-header-title" id="guide-title">Loading…</div>
+    </header>
+
+    <div class="guide-layout">
+        <aside class="guide-sidebar" id="guide-sidebar">
+            <div id="toc-container"></div>
+        </aside>
+
+        <article class="guide-article" id="guide-body">
+            <div class="guide-loading">Loading guide…</div>
+        </article>
+    </div>
+
+    <script src="../../renderer.js"></script>
+    <script>
+        // Load guide from ?src= param, or default to guide.md in same folder
+        const params   = new URLSearchParams(window.location.search);
+        const srcParam = params.get('src');
+        const srcPath  = srcParam || 'guide.md';
+
+        fetch(srcPath)
+            .then(r => {
+                if (!r.ok) throw new Error(`${r.status} — could not load ${srcPath}`);
+                return r.text();
+            })
+            .then(md => {
+                // Pull title from first # heading
+                const titleMatch = md.match(/^#\s+(.+)$/m);
+                if (titleMatch) {
+                    document.title = titleMatch[1] + ' — TotK Modding Resource';
+                    document.getElementById('guide-title').textContent = titleMatch[1];
+                }
+
+                const { toc, body } = ModForgeRenderer.renderWithTOC(md);
+
+                document.getElementById('guide-body').innerHTML = body;
+                document.getElementById('toc-container').innerHTML = toc;
+
+                // Hide sidebar if no TOC
+                if (!toc) {
+                    document.getElementById('guide-sidebar').style.display = 'none';
+                    document.querySelector('.guide-layout').style.gridTemplateColumns = '1fr';
+                }
+
+                // Smooth scroll for TOC links
+                document.querySelectorAll('.toc-link').forEach(link => {
+                    link.addEventListener('click', e => {
+                        e.preventDefault();
+                        const target = document.querySelector(link.getAttribute('href'));
+                        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    });
+                });
+
+                // Highlight active TOC section on scroll
+                const headings = document.querySelectorAll('.guide-article h1, .guide-article h2, .guide-article h3');
+                const tocLinks = document.querySelectorAll('.toc-link');
+                if (headings.length && tocLinks.length) {
+                    const observer = new IntersectionObserver(entries => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                tocLinks.forEach(l => l.classList.remove('active'));
+                                const active = document.querySelector(`.toc-link[href="#${entry.target.id}"]`);
+                                if (active) active.classList.add('active');
+                            }
+                        });
+                    }, { rootMargin: '-10% 0px -80% 0px' });
+                    headings.forEach(h => observer.observe(h));
+                }
+            })
+            .catch(err => {
+                document.getElementById('guide-body').innerHTML =
+                    `<div class="guide-error">Failed to load guide.<br><code>${err.message}</code></div>`;
+            });
+    </script>
+</body>
+</html>

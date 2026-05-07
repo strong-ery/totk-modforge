@@ -1,146 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TotK Modding Resource</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400&display=swap" rel="stylesheet">
-    <script src="script.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
+
+    <video autoplay muted loop id="background-video" playsinline>
+        <source src="Assets/HomeImages/background.mp4" type="video/mp4">
+    </video>
+
+    <div id="noise-overlay"></div>
+
     <header>
         <div class="logo-title-group">
-            <img src="Assets/HomeImages/Modforge_Square.png" alt="Modding Community Logo" id="site-logo">
-            <h1>TotK Modding Resource</h1>
+            <img src="Assets/HomeImages/Modforge_Square.png" alt="ModForge Logo" id="site-logo">
+            <div class="header-text">
+                <h1>TotK Modding Resource</h1>
+                <p class="tagline">Community guides, tools &amp; information</p>
+            </div>
         </div>
-        <p>Welcome to the modding hub.</p>
+        
+        <!-- <a class="submit-guide-btn" href="https://forms.gle/yourformid" target="_blank">
+            Submit a Guide
+        </a> -->
     </header>
 
     <nav>
         <ul>
-            <li data-tab="information">Information</li>
+            <li data-tab="news" class="active">News</li>
             <li data-tab="guides">Guides</li>
-            <li data-tab="news">News</li>
+            <li data-tab="information">Information</li>
         </ul>
+        <div class="nav-underline"></div>
     </nav>
 
-    <section id="information" class="tab-content">
-        <!-- Content for Information -->
-    </section>
-    <section id="guides" class="tab-content" style="display: none;">
-        <!-- Content for Guides -->
-    </section>
-    <section id="news" class="tab-content" style="display: none;">
-        <!-- Content for News -->
-    </section>
+    <main>
+        <section id="news"        class="tab-content active"></section>
+        <section id="guides"      class="tab-content"></section>
+        <section id="information" class="tab-content"></section>
+    </main>
 
-    <div class="entry" data-category="news">
-        <img src="Assets/HomeImages/ModForge_Banner_Blue.jpg" alt="News Entry">
-        <div class="entry-title">Site Update!</div>
-        <div class="entry-description">
-            All guides/information/tools (unfinished or not), have been uploaded to the site!
-        </div>
-    </div>
-
-    <div class="entry" data-category="news">
-        <img src="Assets/HomeImages/ModForge_Banner.jpg" alt="News Entry">
-        <div class="entry-title">Site Revamp!</div>
-        <div class="entry-description">
-            The website has been revamped, you should check it out!
-        </div>
-    </div>
-    
-    <div class="entry" data-category="guides">
-        <img src="Assets/HomeImages/modelswappingbanner.jpg" alt="Guides Entry">
-        <div class="entry-title">Model Swapping</div>
-        <div class="entry-description">Full model swapping guide! (Credit: Lintenso)
-            <span class="wip"> {WIP} </span>
-        </div>
-        <a href="Guides/ModelSwapping/index.html" class="button-link">
-            <button class="visit-button">Visit</button>
-        </a>
-    </div>
-
-    <div class="entry" data-category="guides">
-        <img src="Assets/HomeImages/customactorsbanner.jpg" alt="Guides Entry">
-        <div class="entry-title">Custom Actors</div>
-        <div class="entry-description">Full custom actors guide!
-            <span class="wip"> {WIP} </span>
-        </div>
-        <a href="Guides/CustomActors/index.html" class="button-link">
-            <button class="visit-button">Visit</button>
-        </a>
-    </div>
-
-    
-    <div class="entry" data-category="guides">
-        <img src="Assets/HomeImages/customtexturesbanner.jpg" alt="Guides Entry">
-        <div class="entry-title">Custom Textures</div>
-        <div class="entry-description">Full custom textures guide! (Credit: MaxLastBreath)
-            <span class="wip"> {WIP} </span>
-        </div>
-        <a href="Guides/CustomTextures/index.html" class="button-link">
-            <button class="visit-button">Visit</button>
-        </a>
-    </div>
-
-    <div class="entry" data-category="guides">
-        <img src="Assets/HomeImages/rstbtoolbanner.jpg" alt="Guides Entry">
-        <div class="entry-title">The RESTBL Tool</div>
-        <div class="entry-description">A guide on the RESTBL Tool by Lord Bubbles!
-            <span class="wip"> {WIP} </span>
-        </div>
-        <a href="Guides/RestblGuide/index.html" class="button-link">
-            <button class="visit-button">Visit</button>
-        </a>
-    </div>
-
-    <div class="entry" data-category="guides">
-        <img src="Assets/HomeImages/gettingstartedbanner.jpg" alt="Guides Entry">
-        <div class="entry-title">Getting Started</div>
-        <div class="entry-description">A guide on getting started, and delving deep into TotK modding!
-            <span class="wip"> {WIP} </span>
-        </div>
-        <a href="Guides/GettingStarted/index.html" class="button-link">
-            <button class="visit-button">Visit</button>
-        </a>
-    </div>
-    
-    <div class="entry" data-category="information">
-        <img src="Assets/HomeImages/MaterialCalculatorBanner.jpg" alt="Information Entry">
-        <div class="entry-title">Material Calculator</div>
-        <div class="entry-description">A tool for finding TotK materials which match certain requirements!
-            <span class="updateimminent"> {Update Soon!} </span>
-        </div>
-        <a href="Misc/Tools/MaterialCalculator/calculator.html" class="button-link">
-            <button class="visit-button">Visit</button>
-        </a>
-    </div>
-
-    <div class="entry" data-category="information">
-        <img src="Assets/HomeImages/romfsdetailsbanner.jpg" alt="Information Entry">
-        <div class="entry-title">ROM FileSystem Details</div>
-        <div class="entry-description">General information on how the RomFS system works! (credits to dt12345).
-            <span class="wip"> {WIP} </span>
-        </div>
-        <a href="Misc/Information/RomFileSystemDetails/index.html" class="button-link">
-            <button class="visit-button">Visit</button>
-        </a>
-    </div>
-
-    <div class="entry" data-category="information">
-        <img src="Assets/HomeImages/heapsizebanner.jpg" alt="Information Entry">
-        <div class="entry-title">Heap Size</div>
-        <div class="entry-description">General information on Heap Size.
-            <span class="wip"> {Some Information May Be Incorrect!} </span>
-        </div>
-        <a href="Misc/Information/HeapSize/index.html" class="button-link">
-            <button class="visit-button">Visit</button>
-        </a>
-    </div>
-      
-    <video autoplay muted loop id="background-video">
-        <source src="Assets/HomeImages/background.mp4" type="video/mp4">
-    </video>    
-    
     <script src="script.js"></script>
 </body>
 </html>

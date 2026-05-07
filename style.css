@@ -1,222 +1,405 @@
-/* Import Fira Sans */
-@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;700&display=swap');
-
-/* Reset margin and padding */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* ── Variables ─────────────────────────────────────────── */
+:root {
+    --bg:           #0f0f0f;
+    --surface:      #161616;
+    --surface-2:    #1e1e1e;
+    --border:       rgba(255,255,255,0.07);
+    --accent:       #00ff99;
+    --accent-dim:   rgba(0,255,153,0.12);
+    --accent-glow:  rgba(0,255,153,0.25);
+    --text:         #e0e0e0;
+    --text-muted:   #6a6a6a;
+    --red:          #ff4444;
+    --blue:         #4da6ff;
+    --font-display: 'Syne', sans-serif;
+    --font-mono:    'Space Mono', monospace;
+    --radius:       6px;
+    --transition:   0.22s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Header styles */
-header {
-    display: flex;
-    justify-content: space-between; /* This will push the logo-title group and the paragraph to opposite ends */
-    align-items: center;
-    background-color: #252526; /* Header background */
+@font-face {
+    font-family: 'HyliaSerif';
+    src: url('assets/fonts/HyliaSerifBeta-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
 }
 
-/* Grouping logo and title together */
-.logo-title-group {
-    display: flex;
-    align-items: left;
-}
+/* ── Reset ─────────────────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 
-#site-logo {
-    max-width: 100px; /* Adjust as needed */
-    margin-right: 20px;
-}
-
-h1 {
-    font-size: 2em;
-    margin-bottom: 0; /* Remove bottom margin */
-}
-
-/* Style for the welcome text */
-p {
-    font-size: 1em;
-    opacity: 0.7;
-    margin-left: 20px; /* Add space if needed */
-}
-
-/* Set base font and background */
+/* ── Base ──────────────────────────────────────────────── */
 body {
-    font-family: 'Fira Sans', sans-serif;
-    background-color: #1e1e1e; /* Dark background similar to VS Code */
-    color: #d4d4d4; /* Light grey text color for contrast */
+    font-family: var(--font-display);
+    background-color: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
 }
 
-/* Header styles */
-header {
-    display: flex;
-    align-items: center;
-    padding: 20px;
-    background-color: #252526; /* Header background */
-}
-
-/* Logo styles */
-#site-logo {
-    max-width: 100px; /* Adjust as needed */
-    margin-right: 20px;
-}
-
-/* Title and description container */
-.title-description {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    padding-left: 20px; /* This adds space between the logo and the description */
-}
-
-/* Title styles */
-.title-description h1 {
-    font-size: 2em;
-    margin-bottom: 10px;
-    margin-left: 20px; /* Add more space between the logo and the text */
-}
-
-/* Description styles */
-.title-description p {
-    font-size: 1em;
-    opacity: 0.7;
-}
-
-/* Navigation tabs styles */
-nav {
-    background-color: #333333;
-    padding: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-nav ul {
-    list-style-type: none;
-    display: flex;
-    justify-content: center;
-    font-size: 1.2em;
-}
-
-nav ul li {
-    padding: 10px 20px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-nav ul li:hover,
-nav ul li.active {
-    color: #00ff99; /* Active/hover state color */
-}
-
-/* Entry grid system */
-.entry-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Adjust minmax() for your preferred size */
-    gap: 20px;
-    padding: 20px;
-}
-
-.entry {
-    position: relative;
-    background-color: #333;
-    border-radius: 10px;
-    overflow: hidden;
-    transition: transform 0.3s ease; /* Smooth transition for scaling */
-    margin-bottom: 20px; /* Add space between entries */
-}
-
-.entry img {
-    width: 100%;
-    height: 120px; /* Fixed height for your image strip */
-    object-fit: cover;
-    filter: blur(0px);
-    transition: filter 0.3s ease, height 0.3s ease; /* Smooth transition for filter and height */
-}
-
-.entry:hover img {
-    height: 156px; /* Increase height by 30% */
-    filter: blur(0px); /* Almost remove the blur */
-}
-
-.entry-title {
-    position: absolute;
-    bottom: 0; /* Align to the bottom of the image */
-    left: 0;
-    right: 0; /* Ensure the title does not exceed the width of the entry */
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay for the title */
-    color: white;
-    padding: 10px;
-    font-size: 1.5em;
-    box-sizing: border-box; /* Include padding in the element's total width and height */
-    text-align: center; /* Center the text */
-    transition: background-color 0.3s ease; /* Smooth transition for background */
-}
-
-.entry-description {
-    padding: 15px;
-    font-size: 1em;
-    color: #d4d4d4; /* Light grey text color for contrast */
-    background-color: #252526; /* Slightly lighter background for the description */
-    border-bottom-left-radius: 10px; /* Match the border radius of the entry */
-    border-bottom-right-radius: 10px; /* Match the border radius of the entry */
-}
-
+/* ── Background video + noise ──────────────────────────── */
 #background-video {
     position: fixed;
-    top: 0;
-    left: 0;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: blur(50%);
-    z-index: -1;
+    opacity: 0.08;
+    filter: blur(8px) saturate(0.4);
+    z-index: 0;
+    pointer-events: none;
 }
 
-/* Apply to all major containers */
-header, nav, .tab-content, .entry {
-    background-color: rgba(0, 0, 0, 0.5); /* Adjust color as needed */
+#noise-overlay {
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.03;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* ── Header ────────────────────────────────────────────── */
+header {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    padding: 18px 32px;
+    background: linear-gradient(180deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 100%);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+.logo-title-group {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+#site-logo {
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+    border-radius: 8px;
+    filter: drop-shadow(0 0 8px var(--accent-glow));
+}
+
+.header-text h1 {
+    font-family: 'HyliaSerif', sans-serif;
+    font-size: 1.45em;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    color: #fff;
+}
+
+.tagline {
+    font-family: var(--font-mono);
+    font-size: 0.7em;
+    color: var(--text-muted);
+    margin-top: 3px;
+    letter-spacing: 0.04em;
+}
+
+/* ── Nav ───────────────────────────────────────────────── */
+nav {
+    position: relative;
+    z-index: 10;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 0;
+}
+
+nav ul li {
+    font-family: var(--font-mono);
+    font-size: 0.78em;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 16px 22px;
+    cursor: pointer;
+    color: var(--text-muted);
+    border-bottom: 2px solid transparent;
+    transition: color var(--transition), border-color var(--transition);
+    user-select: none;
+    margin-bottom: -1px;
+}
+
+nav ul li:hover {
+    color: var(--text);
+}
+
+nav ul li.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+}
+
+/* ── Main / Sections ───────────────────────────────────── */
+main {
+    position: relative;
+    z-index: 5;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 24px 64px;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+    animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Entry Cards ───────────────────────────────────────── */
+.entry {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: border-color var(--transition), transform var(--transition), box-shadow var(--transition);
+}
+
+.entry:hover {
+    border-color: rgba(255,255,255,0.14);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+
+/* Announcement type — no image, compact */
+.entry.type-announcement .entry-image-wrap {
+    display: block;
+}
+
+/* Article type — has image header */
+.entry.type-article .entry-image-wrap {
+    display: block;
+}
+
+.entry-image-wrap {
+    display: none;
+    width: 100%;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.entry-image-wrap img {
+    width: 100%;
+    height: auto;  /* ← this is the key change */
+    object-fit: unset;
+    display: block;
+    transition: transform 0.4s ease;
+    filter: brightness(0.85);
+}
+
+.entry:hover .entry-image-wrap img {
+    transform: scale(1.04);
+    filter: brightness(1);
+}
+
+.entry-body {
+    padding: 14px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 8px;
+}
+
+.entry-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.entry-type-badge {
+    font-family: var(--font-mono);
+    font-size: 0.62em;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 3px;
+    font-weight: 700;
+}
+
+.type-announcement .entry-type-badge {
+    background: rgba(77,166,255,0.15);
+    color: var(--blue);
+    border: 1px solid rgba(77,166,255,0.25);
+}
+
+.type-article .entry-type-badge {
+    background: var(--accent-dim);
+    color: var(--accent);
+    border: 1px solid rgba(0,255,153,0.2);
+}
+
+.entry-date {
+    font-family: var(--font-mono);
+    font-size: 0.62em;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+    margin-left: auto;
+}
+
+.entry-title {
+    font-family: var(--font-display);
+    font-size: 1.05em;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.25;
+}
+
+.entry-description {
+    font-family: var(--font-display);
+    font-size: 0.82em;
+    color: var(--text-muted);
+    line-height: 1.55;
+    flex: 1;
+}
+
+.entry-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 2px;
+}
+
+.entry-tag {
+    font-family: var(--font-mono);
+    font-size: 0.58em;
+    padding: 2px 6px;
+    border-radius: 3px;
+    background: rgba(255,255,255,0.05);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.entry-tag.wip {
+    color: var(--red);
+    background: rgba(255,68,68,0.08);
+    border-color: rgba(255,68,68,0.2);
+    animation: pulseRed 2s ease-in-out infinite;
+}
+
+.entry-tag.update-soon {
+    color: var(--accent);
+    background: var(--accent-dim);
+    border-color: rgba(0,255,153,0.2);
+    animation: pulseGreen 2s ease-in-out infinite;
+}
+
+@keyframes pulseRed {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.45; }
+}
+@keyframes pulseGreen {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.45; }
+}
+
+.entry-footer {
+    margin-top: auto;
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 10px;
 }
 
 .visit-button {
-    position: absolute;
-    top: 87%;
-    right: 10px; /* Adjust as needed */
-    transform: translateY(-50%); /* Vertically center the button */
-    padding: 5px 10px; /* Smaller padding for a smaller button */
-    background-color: #007acc;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 0.8em; /* Smaller font size */
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.7em;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 7px 16px;
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid rgba(0,255,153,0.35);
+    border-radius: var(--radius);
     cursor: pointer;
-    transition: background-color 0.3s;
+    text-decoration: none;
+    transition: background var(--transition), border-color var(--transition), color var(--transition);
 }
 
 .visit-button:hover {
-    background-color: #005f8c;
+    background: var(--accent-dim);
+    border-color: var(--accent);
+    color: #fff;
 }
 
-.button-link {
-    text-decoration: none; /* Removes underline from links */
+/* ── Loading / Error states ────────────────────────────── */
+.state-message {
+    font-family: var(--font-mono);
+    font-size: 0.8em;
+    color: var(--text-muted);
+    padding: 40px 0;
+    text-align: center;
+    grid-column: 1 / -1;
+    letter-spacing: 0.05em;
 }
 
-@keyframes flash {
-    0%, 100% { color: red; }
-    50% { color: grey; }
+.state-message.error {
+    color: var(--red);
 }
 
-@keyframes flash2 {
-    0%, 100% { color: rgb(0, 255, 132); }
-    50% { color: grey; }
+/* ── Scrollbar ─────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #444; }
+
+/* ── Responsive ────────────────────────────────────────── */
+@media (max-width: 600px) {
+    header { padding: 14px 16px; }
+    nav { padding: 0 16px; }
+    nav ul li { padding: 14px 14px; font-size: 0.72em; }
+    main { padding: 20px 12px 48px; }
+    .tab-content.active { grid-template-columns: 1fr; }
 }
 
-@keyframes flash3 {
-    0%, 100% { color: rgb(0, 89, 255); }
-    50% { color: grey; }
+/* ── Submit button (header) ────────────────────────────── */
+.submit-guide-btn {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 0.7em;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 8px 18px;
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid rgba(0,255,153,0.35);
+    border-radius: var(--radius);
+    cursor: pointer;
+    text-decoration: none;
+    transition: background var(--transition), border-color var(--transition), color var(--transition);
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
-.wip {
-    animation: flash 2s linear infinite;
-}
-
-.updateimminent {
-    animation: flash2 2s linear infinite;
+.submit-guide-btn:hover {
+    background: var(--accent-dim);
+    border-color: var(--accent);
+    color: #fff;
 }
