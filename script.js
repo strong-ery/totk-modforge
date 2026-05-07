@@ -29,7 +29,7 @@
  * }
  */
 
-const TABS = ['news', 'guides', 'information'];
+const TABS = ['news', 'guides', 'information', 'resources'];
 
 // ── Date formatter ────────────────────────────────────────
 function formatDate(iso) {
@@ -216,6 +216,67 @@ async function loadTab(tab) {
     }
 }
 
+// ── Build a single resource card ──────────────────────────
+function buildResourceCard(entry) {
+    const card = document.createElement('a');
+    card.className = 'resource-card';
+    if (entry.url) {
+        card.href = entry.url;
+        card.target = '_blank';
+        card.rel = 'noopener noreferrer';
+    }
+
+    const tagsHTML = (entry.tags || []).map(tag => {
+        const cls = tag === 'wip' ? 'wip' : tag === 'update-soon' ? 'update-soon' : '';
+        const label = tag === 'wip' ? 'WIP' : tag === 'update-soon' ? 'Update Soon' : tag;
+        return `<span class="entry-tag ${cls}">${label}</span>`;
+    }).join('');
+
+    card.innerHTML = `
+        ${entry.image ? `<div class="resource-card-image"><img src="${entry.image}" alt="${entry.title}" loading="lazy"></div>` : ''}
+        <div class="resource-card-body">
+            <div class="resource-card-title">${entry.title}</div>
+            ${entry.description ? `<div class="resource-card-desc">${entry.description}</div>` : ''}
+            ${tagsHTML ? `<div class="resource-card-tags">${tagsHTML}</div>` : ''}
+        </div>
+        ${entry.url ? `<div class="resource-card-arrow">↗</div>` : ''}`;
+
+    return card;
+}
+
+// ── Load resources tab ────────────────────────────────────
+async function loadResourcesTab() {
+    const section = document.getElementById('resources');
+    section.innerHTML = `<p class="state-message">Loading…</p>`;
+
+    let filenames;
+    try {
+        filenames = await fetchJSON('content/resources/manifest.json');
+    } catch (e) {
+        section.innerHTML = `<p class="state-message error">Could not load manifest for "resources".<br>Make sure content/resources/manifest.json exists.</p>`;
+        return;
+    }
+
+    const results = await Promise.allSettled(
+        filenames.map(name => fetchJSON(`content/resources/${name}`))
+    );
+
+    const entries = [];
+    results.forEach((r, i) => {
+        if (r.status === 'fulfilled') entries.push(r.value);
+        else console.warn(`Failed to load content/resources/${filenames[i]}:`, r.reason);
+    });
+
+    section.innerHTML = '';
+
+    if (entries.length === 0) {
+        section.innerHTML = `<p class="state-message">No resources yet.</p>`;
+        return;
+    }
+
+    entries.forEach(entry => section.appendChild(buildResourceCard(entry)));
+}
+
 // ── Tab switching ─────────────────────────────────────────
 const loadedTabs = new Set();
 
@@ -232,7 +293,8 @@ function switchTab(tab) {
 
     if (!loadedTabs.has(tab)) {
         loadedTabs.add(tab);
-        loadTab(tab);
+        if (tab === 'resources') loadResourcesTab();
+        else loadTab(tab);
     }
 }
 
