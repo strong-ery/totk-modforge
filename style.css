@@ -216,6 +216,17 @@ main {
     display: block;
 }
 
+/* Update type */
+.entry.type-update .entry-image-wrap {
+    display: block;
+}
+
+.type-update .entry-type-badge {
+    background: rgba(160,100,255,0.12);
+    color: #a064ff;
+    border: 1px solid rgba(160,100,255,0.25);
+}
+
 .entry-image-wrap {
     display: none;
     width: 100%;
