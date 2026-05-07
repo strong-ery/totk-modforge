@@ -235,9 +235,12 @@ function buildResourceCard(entry) {
     card.innerHTML = `
         ${entry.image ? `<div class="resource-card-image"><img src="${entry.image}" alt="${entry.title}" loading="lazy"></div>` : ''}
         <div class="resource-card-body">
+            <div class="resource-card-meta">
+                <span class="entry-type-badge type-resource-badge">Resource</span>
+                ${tagsHTML}
+            </div>
             <div class="resource-card-title">${entry.title}</div>
             ${entry.description ? `<div class="resource-card-desc">${entry.description}</div>` : ''}
-            ${tagsHTML ? `<div class="resource-card-tags">${tagsHTML}</div>` : ''}
         </div>
         ${entry.url ? `<div class="resource-card-arrow">↗</div>` : ''}`;
 
