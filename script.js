@@ -149,6 +149,30 @@ function switchTab(tab) {
     }
 }
 
+// ── Background: grab frame at 2s then freeze ──────────────
+(function () {
+    const video  = document.getElementById('background-video');
+    const canvas = document.getElementById('background-canvas');
+    const ctx    = canvas.getContext('2d');
+
+    function grabFrame() {
+        canvas.width  = video.videoWidth;
+        canvas.height = video.videoHeight;
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        video.pause();
+        video.src = ''; // release decode resources entirely
+    }
+
+    video.addEventListener('loadedmetadata', () => {
+        video.currentTime = 2; // seek to exactly 2s
+    });
+
+    // 'seeked' fires once the frame at currentTime is ready
+    video.addEventListener('seeked', grabFrame, { once: true });
+
+    video.load();
+})();
+
 // ── Init ──────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('nav ul li').forEach(li => {

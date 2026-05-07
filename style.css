@@ -37,19 +37,31 @@ body {
     overflow-x: hidden;
 }
 
-/* ── Background video + noise ──────────────────────────── */
-#background-video {
+#background-canvas {
     position: fixed;
-    inset: -20px;                      /* overhang prevents blur edge bleed */
+    inset: -20px;
     width: calc(100% + 40px);
     height: calc(100% + 40px);
     object-fit: cover;
-    opacity: 0.08;
     filter: blur(4px) saturate(0.4);
     z-index: 0;
     pointer-events: none;
-    will-change: transform;            /* promote to own GPU layer */
-    transform: translateZ(0);          /* force hardware acceleration */
+    animation: 
+        bgDrift   18s ease-in-out infinite alternate,
+        bgBreathe 18s  ease-in-out infinite alternate;
+}
+
+@keyframes bgDrift {
+    0%   { transform: scale(1.04) translate(0px,  0px); }
+    25%  { transform: scale(1.06) translate(-6px, -4px); }
+    50%  { transform: scale(1.05) translate(4px,  -6px); }
+    75%  { transform: scale(1.07) translate(-3px,  5px); }
+    100% { transform: scale(1.04) translate(5px,   2px); }
+}
+
+@keyframes bgBreathe {
+    0%,  100% { opacity: 0.08; }
+    50%        { opacity: 0.02; }
 }
 
 #noise-overlay {
