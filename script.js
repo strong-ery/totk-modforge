@@ -74,7 +74,12 @@ function buildCard(entry) {
 
     if (entry.url) {
         card.style.cursor = 'pointer';
-        card.addEventListener('click', () => window.location.href = entry.url);
+        card.addEventListener('click', () => {
+            // Remember which tab we're leaving from so the hub can restore it
+            const activeTab = document.querySelector('nav ul li.active')?.dataset.tab;
+            if (activeTab) localStorage.setItem('modforge_last_tab', activeTab);
+            window.location.href = entry.url;
+        });
     }
 
     return card;
@@ -143,6 +148,9 @@ function switchTab(tab) {
         s.classList.toggle('active', s.id === tab);
     });
 
+    // Remember the selected tab in the URL hash so Back navigation restores it
+    history.replaceState(null, '', `#${tab}`);
+
     if (!loadedTabs.has(tab)) {
         loadedTabs.add(tab);
         loadTab(tab);
@@ -179,8 +187,15 @@ document.addEventListener('DOMContentLoaded', () => {
         li.addEventListener('click', () => switchTab(li.dataset.tab));
     });
 
-    // Load the default tab (news)
-    const defaultTab = 'news';
+    // Restore tab: localStorage wins (set when clicking into an article),
+    // then fall back to URL hash, then default to 'news'
+    const savedTab = localStorage.getItem('modforge_last_tab');
+    localStorage.removeItem('modforge_last_tab'); // consume it — one-time restore
+    const hashTab = window.location.hash.slice(1);
+    const defaultTab = TABS.includes(savedTab) ? savedTab
+                     : TABS.includes(hashTab)  ? hashTab
+                     : 'news';
     loadedTabs.add(defaultTab);
     loadTab(defaultTab);
+    switchTab(defaultTab);
 });
