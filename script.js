@@ -92,6 +92,36 @@ async function fetchJSON(path) {
     return res.json();
 }
 
+// ── Search: filter guide cards by query ───────────────────
+function filterGuides(entries, query) {
+    const q = query.trim().toLowerCase();
+    if (!q) return entries;
+    return entries.filter(e => {
+        const haystack = [
+            e.title || '',
+            e.description || '',
+            e.credit || '',
+            ...(e.tags || [])
+        ].join(' ').toLowerCase();
+        return haystack.includes(q);
+    });
+}
+
+// ── Render guide cards (with search support) ──────────────
+function renderGuideCards(section, entries, query) {
+    const cardsWrap = section.querySelector('.guides-cards');
+    cardsWrap.innerHTML = '';
+
+    const filtered = filterGuides(entries, query);
+
+    if (filtered.length === 0) {
+        cardsWrap.innerHTML = `<p class="state-message">No guides match your search.</p>`;
+        return;
+    }
+
+    filtered.forEach(entry => cardsWrap.appendChild(buildCard(entry)));
+}
+
 // ── Load all entries for a tab from its manifest ──────────
 async function loadTab(tab) {
     const section = document.getElementById(tab);
@@ -134,7 +164,56 @@ async function loadTab(tab) {
         return;
     }
 
-    entries.forEach(entry => section.appendChild(buildCard(entry)));
+    // Guides tab gets a search bar
+    if (tab === 'guides') {
+        const searchWrap = document.createElement('div');
+        searchWrap.className = 'guides-search-wrap';
+        searchWrap.innerHTML = `
+            <div class="guides-search-inner">
+                <svg class="search-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M12.5 12.5L16 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                <input
+                    type="search"
+                    id="guides-search-input"
+                    class="guides-search-input"
+                    placeholder="Search guides…"
+                    autocomplete="off"
+                    spellcheck="false"
+                />
+                <button class="guides-search-clear" id="guides-search-clear" aria-label="Clear search" style="display:none">
+                    <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M6 6l8 8M14 6l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>`;
+        section.appendChild(searchWrap);
+
+        const cardsWrap = document.createElement('div');
+        cardsWrap.className = 'guides-cards';
+        section.appendChild(cardsWrap);
+
+        renderGuideCards(section, entries, '');
+
+        const input = document.getElementById('guides-search-input');
+        const clearBtn = document.getElementById('guides-search-clear');
+
+        input.addEventListener('input', () => {
+            const q = input.value;
+            clearBtn.style.display = q ? 'flex' : 'none';
+            renderGuideCards(section, entries, q);
+        });
+
+        clearBtn.addEventListener('click', () => {
+            input.value = '';
+            clearBtn.style.display = 'none';
+            input.focus();
+            renderGuideCards(section, entries, '');
+        });
+    } else {
+        entries.forEach(entry => section.appendChild(buildCard(entry)));
+    }
 }
 
 // ── Tab switching ─────────────────────────────────────────
