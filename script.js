@@ -61,12 +61,6 @@ function buildCard(entry) {
         return `<span class="entry-tag ${cls}">${label}</span>`;
     }).join('');
 
-    const footerHTML = entry.url
-        ? `<div class="entry-footer">
-               <a href="${entry.url}" class="visit-button">Visit →</a>
-           </div>`
-        : '';
-
     card.innerHTML += `
         <div class="entry-body">
             <div class="entry-meta">
@@ -76,8 +70,12 @@ function buildCard(entry) {
             </div>
             <div class="entry-title">${entry.title}</div>
             ${entry.description ? `<div class="entry-description">${entry.description}</div>` : ''}
-            ${footerHTML}
         </div>`;
+
+    if (entry.url) {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', () => window.location.href = entry.url);
+    }
 
     return card;
 }

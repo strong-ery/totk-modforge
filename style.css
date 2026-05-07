@@ -320,34 +320,7 @@ main {
     50%       { opacity: 0.45; }
 }
 
-.entry-footer {
-    margin-top: auto;
-    display: flex;
-    justify-content: flex-end;
-    padding-top: 10px;
-}
 
-.visit-button {
-    display: inline-block;
-    font-family: var(--font-mono);
-    font-size: 0.7em;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 7px 16px;
-    background: transparent;
-    color: var(--accent);
-    border: 1px solid rgba(0,255,153,0.35);
-    border-radius: var(--radius);
-    cursor: pointer;
-    text-decoration: none;
-    transition: background var(--transition), border-color var(--transition), color var(--transition);
-}
-
-.visit-button:hover {
-    background: var(--accent-dim);
-    border-color: var(--accent);
-    color: #fff;
-}
 
 /* ── Loading / Error states ────────────────────────────── */
 .state-message {
