@@ -98,7 +98,7 @@ Standard markdown image syntax with an optional attribute block:
 - `align` — `left`, `center`, or `right` (default: center). Left and right float with text wrapping.
 - `caption` — displayed below the image
 
-![Example banner](Assets/HomeImages/modelswappingbanner.jpg){align=center caption="A full-width banner with a caption"}
+![Example banner](assets/HomeImages/modelswappingbanner.jpg){align=center caption="A full-width banner with a caption"}
 
 ---
 
@@ -161,8 +161,8 @@ romfs/
 Side by side image comparison. Useful for before/after, vanilla vs modded, correct vs incorrect.
 
 :::compare
-left: Assets/HomeImages/ModForge_Banner.jpg | Before
-right: Assets/HomeImages/ModForge_Banner_Blue.jpg | After
+left: assets/HomeImages/ModForge_Banner.jpg | Before
+right: assets/HomeImages/ModForge_Banner_Blue.jpg | After
 :::
 
 ---
@@ -216,7 +216,7 @@ Each guide entry on the hub is defined by a JSON file in [file]content/guides/[/
   "title":       "Guide Title",
   "date":        "2024-03-15",
   "type":        "article",
-  "image":       "Assets/HomeImages/yourbanner.jpg",
+  "image":       "assets/HomeImages/yourbanner.jpg",
   "description": "Short description shown on the hub card.",
   "url":         "guide.html?src=Guides/YourGuide/guide.md",
   "tags":        ["wip"],
