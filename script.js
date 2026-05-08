@@ -41,11 +41,13 @@ function formatDate(iso) {
 
 // ── Build a single entry card ─────────────────────────────
 function buildCard(entry) {
-    const isArticle = entry.type === 'article';
-    const isUpdate  = entry.type === 'update';
+    const isArticle  = entry.type === 'article';
+    const isUpdate   = entry.type === 'update';
+    const isResource = entry.type === 'resource';
 
     const card = document.createElement('div');
-    card.className = `entry type-${isArticle ? 'article' : isUpdate ? 'update' : 'announcement'}`;
+    const typeClass = isArticle ? 'article' : isUpdate ? 'update' : isResource ? 'resource' : 'announcement';
+    card.className = `entry type-${typeClass}`;
 
     // Image (articles only)
     if (entry.image) {
@@ -65,7 +67,7 @@ function buildCard(entry) {
     card.innerHTML += `
         <div class="entry-body">
             <div class="entry-meta">
-                <span class="entry-type-badge">${isArticle ? 'Article' : isUpdate ? 'Update' : 'Announcement'}</span>
+                <span class="entry-type-badge">${isArticle ? 'Article' : isUpdate ? 'Update' : isResource ? 'Resource' : 'Announcement'}</span>
                 ${tagsHTML}
                 ${entry.date ? `<span class="entry-date">${formatDate(entry.date)}</span>` : ''}
             </div>
