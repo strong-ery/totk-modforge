@@ -103,6 +103,7 @@ header {
 .header-text h1 {
     font-family: 'HyliaSerif', sans-serif;
     font-size: 1.45em;
+    font-weight: normal;
     letter-spacing: -0.01em;
     line-height: 1.1;
     color: #fff;
